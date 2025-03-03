@@ -32,6 +32,40 @@ const Login = () => {
 
   const valideValue = Object.values(data).every((el) => el);
 
+  // const handleSubmit = async(e)=>{
+  //     e.preventDefault()
+
+  //     try {
+  //         const response = await Axios({
+  //             ...SummaryApi.login,
+  //             data : data
+  //         })
+
+  //         if(response.data.error){
+  //             toast.error(response.data.message)
+  //         }
+
+  //         if(response.data.success){
+  //             toast.success(response.data.message)
+  //             localStorage.setItem('accesstoken',response.data.data.accesstoken)
+  //             localStorage.setItem('refreshToken',response.data.data.refreshToken)
+
+  //             const userDetails = await fetchUserDetails()
+  //             dispatch(setUserDetails(userDetails.data))
+
+  //             setData({
+  //                 email : "",
+  //                 password : "",
+  //             })
+  //             navigate("/")
+  //         }
+
+  //     } catch (error) {
+  //         AxiosToastError(error)
+  //     }
+
+  // }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -39,6 +73,7 @@ const Login = () => {
       const response = await Axios({
         ...SummaryApi.login,
         data: data,
+        withCredentials: true, // 🔥 Allow sending/receiving cookies
       });
 
       if (response.data.error) {
@@ -47,9 +82,8 @@ const Login = () => {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        localStorage.setItem("accesstoken", response.data.data.accesstoken);
-        localStorage.setItem("refreshToken", response.data.data.refreshToken);
 
+        // Fetch user details since token is now stored in cookies
         const userDetails = await fetchUserDetails();
         dispatch(setUserDetails(userDetails.data));
 
